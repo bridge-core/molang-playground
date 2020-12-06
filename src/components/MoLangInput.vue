@@ -20,7 +20,9 @@
 	<div class="output-row" style="display: flex">
 		<div class="molang-output">
 			<h1>Output:</h1>
-			<p>{{ output }}</p>
+			<p :style="{ color: isOutputError ? '#d62828' : 'unset' }">
+				{{ output }}
+			</p>
 		</div>
 		<div class="console-output">
 			<h1>Console:</h1>
@@ -61,6 +63,7 @@ export default {
 			localStorage.getItem('molang-code') ||
 			'math.pow(math.round(query.anim_time), 2)',
 		output: 0,
+		isOutputError: false,
 		consoleOutput: [],
 		shouldStopRefresh: false,
 		executionMode:
@@ -106,8 +109,10 @@ export default {
 		execute() {
 			try {
 				this.output = molang.execute(this.code)
+				this.isOutputError = false
 			} catch (err) {
 				this.output = err.message
+				this.isOutputError = true
 			}
 
 			this.lastFrameTimestamp = Date.now()
