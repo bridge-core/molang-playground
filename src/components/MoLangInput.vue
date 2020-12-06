@@ -69,7 +69,6 @@ export default {
 	},
 	methods: {
 		onChange() {
-			this.lastFrameTimestamp = Date.now()
 			localStorage.setItem('molang-code', this.code)
 
 			try {
@@ -77,6 +76,8 @@ export default {
 			} catch (err) {
 				this.output = err.message
 			}
+
+			this.lastFrameTimestamp = Date.now()
 		},
 		highlight() {
 			return prism.highlight(this.code, prism.languages.molang)
