@@ -18,8 +18,6 @@ import prism from 'prismjs'
 import 'vue-prism-editor/dist/prismeditor.min.css'
 import 'prismjs/themes/prism-tomorrow.css'
 
-let molang
-
 prism.languages.molang = {
 	string: /(')(?:\\(?:\r\n|[\s\S])|(?!\1)[^\\\r\n])*\1/,
 	'function-name': /\b(?!\d)(math|query|q)\.\w+/i,
@@ -30,6 +28,8 @@ prism.languages.molang = {
 	keyword: /\b(return|loop|for_each|continue|break)\b/i,
 	punctuation: /[.,;()[\]{}]/,
 }
+
+let molang
 
 export default {
 	data: () => ({
