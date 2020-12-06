@@ -1,0 +1,18 @@
+{
+  "name": "molang-playground",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "molang": "^1.6.1",
+    "prismjs": "^1.22.0",
+    "vue": "^3.0.4",
+    "vue-prism-editor": "^2.0.0-alpha.2"
+  },
+  "devDependencies": {
+    "vite": "^1.0.0-rc.13",
+    "@vue/compiler-sfc": "^3.0.4"
+  }
+}
