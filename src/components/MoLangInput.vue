@@ -37,7 +37,7 @@ export default {
 		lastFrameTimestamp: Date.now(),
 		code:
 			localStorage.getItem('molang-code') ||
-			'math.pow(query.anim_time, 2)',
+			'math.pow(math.round(query.anim_time), 2)',
 		output: 0,
 		shouldStopRefresh: false,
 	}),
