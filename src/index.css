@@ -49,10 +49,21 @@ body {
 	outline: none;
 }
 
-.output {
+.output-row {
 	border-top: 1px solid #ccc;
+}
+
+.output-row .molang-output,
+.output-row .console-output {
 	padding: 12px;
-	height: calc(16vh - 14px);
+	width: calc(50vw - 1px);
+	height: calc(16vh - 15px);
+}
+.output-row .molang-output {
+	border-right: 1px solid #ccc;
+}
+.output-row .console-output {
+	overflow-y: auto;
 }
 
 .options {

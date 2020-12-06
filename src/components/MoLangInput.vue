@@ -6,13 +6,29 @@
 		line-numbers
 	/>
 	<div class="options">
+		<button @click="toggleShouldLoop">
+			Execution: {{ executionMode }}
+		</button>
+		<button v-if="executionMode === 'Manual'" @click="execute">
+			Execute
+		</button>
 		<button @click="copyCode">Copy Code</button>
+		<button @click="clearCode">Clear Code</button>
 		<button @click="resetTime">Reset Time</button>
-		<button @click="clearCode">Clear</button>
+		<button @click="clearConsole">Clear Console</button>
 	</div>
-	<div class="output">
-		<h1>Output:</h1>
-		<p>{{ output }}</p>
+	<div class="output-row" style="display: flex">
+		<div class="molang-output">
+			<h1>Output:</h1>
+			<p>{{ output }}</p>
+		</div>
+		<div class="console-output">
+			<h1>Console:</h1>
+			<p v-if="consoleOutput.length === 0">[EMPTY]</p>
+			<ul v-else>
+				<li v-for="(text, i) in consoleOutput" :key="i">{{ text }}</li>
+			</ul>
+		</div>
 	</div>
 </template>
 
@@ -45,23 +61,30 @@ export default {
 			localStorage.getItem('molang-code') ||
 			'math.pow(math.round(query.anim_time), 2)',
 		output: 0,
+		consoleOutput: [],
 		shouldStopRefresh: false,
+		executionMode: localStorage.getItem('molang-execution-mode') || 'Loop',
 	}),
 	mounted() {
 		const currentTime = () => (Date.now() - this.startTimestamp) / 1000
-
+		const log = (logVal) => {
+			this.consoleOutput.push(logVal)
+			return logVal
+		}
 		molang = new MoLang({
 			'query.anim_time': currentTime,
 			'query.delta_time': () => Date.now() - this.lastFrameTimestamp,
 			'query.life_time': currentTime,
 			'query.time': currentTime,
+			'query.log': log,
+			'query.debug_output': log,
 		})
 
 		this.onChange()
 		const refresh = () => {
 			if (this.shouldStopRefresh) return
 
-			this.onChange()
+			if (this.executionMode === 'Loop') this.execute()
 			requestAnimationFrame(refresh)
 		}
 
@@ -77,6 +100,9 @@ export default {
 		onChange() {
 			localStorage.setItem('molang-code', this.code)
 
+			if (this.executionMode === 'On Change') this.execute()
+		},
+		execute() {
 			try {
 				this.output = molang.execute(this.code)
 			} catch (err) {
@@ -104,6 +130,18 @@ export default {
 				this.resetTime()
 				this.code = ''
 			}
+		},
+		clearConsole() {
+			this.consoleOutput = []
+		},
+		toggleShouldLoop() {
+			if (this.executionMode === 'Loop') this.executionMode = 'On Change'
+			else if (this.executionMode === 'On Change')
+				this.executionMode = 'Manual'
+			else if (this.executionMode === 'Manual')
+				this.executionMode = 'Loop'
+
+			localStorage.setItem('molang-execution-mode', this.executionMode)
 		},
 	},
 	watch: {
