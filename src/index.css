@@ -8,6 +8,23 @@ body {
 	padding: 0;
 	box-sizing: border-box;
 }
+/** Scrollbar */
+*::-webkit-scrollbar {
+	width: 6px;
+	height: 6px;
+}
+*::-webkit-scrollbar-track {
+	box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.5);
+}
+*::-webkit-scrollbar-thumb {
+	background-color: rgba(0, 0, 0, 0.35);
+	box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.4);
+}
+
+/* No text selection */
+:root {
+	user-select: none;
+}
 
 .molang-editor {
 	font-size: 14px;
@@ -17,11 +34,36 @@ body {
 	margin-bottom: 1rem;
 }
 
+.prism-editor__textarea {
+	background-color: transparent;
+	border: none;
+	color: white;
+	user-select: none;
+}
+.prism-editor__textarea::selection {
+	background-color: #bbb;
+	opacity: 0.4;
+}
 .prism-editor__textarea:focus {
+	opacity: 1;
 	outline: none;
 }
 
 .output {
 	border-top: 1px solid #ccc;
 	padding: 12px;
+	height: calc(16vh - 14px);
+}
+
+.options {
+	border-top: 1px solid #ccc;
+	height: calc(4vh - 2px);
+}
+.options button {
+	height: 100%;
+	outline: 1px solid #ccc;
+	background: transparent;
+	color: #ccc;
+	border: none;
+	padding: 0 4px;
 }

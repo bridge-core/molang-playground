@@ -5,6 +5,11 @@
 		:highlight="highlight"
 		line-numbers
 	/>
+	<div class="options">
+		<button @click="copyCode">Copy Code</button>
+		<button @click="resetTime">Reset Time</button>
+		<button @click="clearCode">Clear</button>
+	</div>
 	<div class="output">
 		<h1>Output:</h1>
 		<p>{{ output }}</p>
@@ -13,9 +18,10 @@
 
 <script>
 import { MoLang } from 'molang'
-import { PrismEditor } from 'vue-prism-editor'
-import prism from 'prismjs'
 import 'vue-prism-editor/dist/prismeditor.min.css'
+import prism from 'prismjs'
+import { PrismEditor } from 'vue-prism-editor'
+
 import 'prismjs/themes/prism-tomorrow.css'
 
 prism.languages.molang = {
@@ -81,6 +87,23 @@ export default {
 		},
 		highlight() {
 			return prism.highlight(this.code, prism.languages.molang)
+		},
+		resetTime() {
+			this.startTimestamp = Date.now()
+			this.lastFrameTimestamp = Date.now()
+		},
+		copyCode() {
+			navigator.clipboard.writeText(this.code.replace('\n', ' '))
+		},
+		clearCode() {
+			if (
+				window.confirm(
+					'Are you sure that you want to clear the MoLang code?'
+				)
+			) {
+				this.resetTime()
+				this.code = ''
+			}
 		},
 	},
 	watch: {
