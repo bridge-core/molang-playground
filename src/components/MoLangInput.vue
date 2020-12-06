@@ -42,6 +42,10 @@ import { PrismEditor } from 'vue-prism-editor'
 
 import 'prismjs/themes/prism-tomorrow.css'
 
+/**
+ * Taken from JannisX11's MolangJS (https://github.com/JannisX11/MolangJS)
+ * Modified to fit our needs
+ */
 prism.languages.molang = {
 	string: /(')(?:\\(?:\r\n|[\s\S])|(?!\1)[^\\\r\n])*\1/,
 	'function-name': /\b(?!\d)(math|query|q)\.\w+/i,
