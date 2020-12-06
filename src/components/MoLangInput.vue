@@ -63,7 +63,8 @@ export default {
 		output: 0,
 		consoleOutput: [],
 		shouldStopRefresh: false,
-		executionMode: localStorage.getItem('molang-execution-mode') || 'Loop',
+		executionMode:
+			localStorage.getItem('molang-execution-mode') || 'Manual',
 	}),
 	mounted() {
 		const currentTime = () => (Date.now() - this.startTimestamp) / 1000
