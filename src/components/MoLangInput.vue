@@ -202,6 +202,11 @@ export default {
 		},
 		copyCode() {
 			navigator.clipboard.writeText(this.code)
+			window.alert('Successfully copied MoLang code!')
+		},
+		share() {
+			navigator.clipboard.writeText(shareMoLang(this.code))
+			window.alert('Successfully copied playground URL!')
 		},
 		clearCode() {
 			if (
@@ -224,9 +229,6 @@ export default {
 				this.executionMode = 'Loop'
 
 			localStorage.setItem('molang-execution-mode', this.executionMode)
-		},
-		share() {
-			navigator.clipboard.writeText(shareMoLang(this.code))
 		},
 	},
 	watch: {
