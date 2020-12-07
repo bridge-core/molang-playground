@@ -78,3 +78,7 @@ body {
 	border: none;
 	padding: 0 4px;
 }
+
+.options button svg {
+	height: calc(1.4vh);
+}
