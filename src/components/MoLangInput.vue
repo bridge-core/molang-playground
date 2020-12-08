@@ -155,7 +155,6 @@ export default {
 			'query.anim_time': currentTime,
 			'query.delta_time': () => Date.now() - this.lastFrameTimestamp,
 			'query.life_time': currentTime,
-			'query.time': currentTime,
 			'query.log': log,
 			'query.debug_output': log,
 		})
