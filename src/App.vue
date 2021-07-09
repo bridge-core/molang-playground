@@ -1,6 +1,6 @@
 <template>
 	<div :style="colors">
-		<MoLangInput />
+		<MoLangInput :embedded="embedded" />
 	</div>
 </template>
 
@@ -13,10 +13,12 @@ export default {
 		MoLangInput,
 	},
 	data: () => ({
-		colors: {},
+		embedded: false,
 	}),
 	mounted() {
 		window.addEventListener('message', (event) => {
+			this.embedded = true
+
 			if (event.data.type === 'set-color')
 				document.documentElement.style.setProperty(
 					event.data.colorName,

@@ -20,7 +20,7 @@
 				<path fill="currentColor" d="M8 5v14l11-7z" />
 			</svg>
 		</button>
-		<button @click="copyCode">
+		<button v-if="!embedded" @click="copyCode">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				viewBox="0 0 24 24"
@@ -35,7 +35,7 @@
 				/>
 			</svg>
 		</button>
-		<button @click="share">
+		<button v-if="!embedded" @click="share">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				viewBox="0 0 24 24"
@@ -51,7 +51,7 @@
 				/>
 			</svg>
 		</button>
-		<button @click="clearCode">
+		<button v-if="!embedded" @click="clearCode">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				height="24"
@@ -129,6 +129,9 @@ prism.languages.molang = {
 let molang
 
 export default {
+	props: {
+		embedded: Boolean,
+	},
 	data: () => ({
 		startTimestamp: Date.now(),
 		lastFrameTimestamp: Date.now(),
