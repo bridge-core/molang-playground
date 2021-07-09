@@ -1,5 +1,5 @@
 <template>
-	<MoLangInput :embedded="embedded" />
+	<MoLangInput :embedded="embedded" :uuid="uuid" />
 </template>
 
 <script>
@@ -12,12 +12,14 @@ export default {
 	},
 	data: () => ({
 		embedded: false,
+		uuid: null,
 	}),
 	mounted() {
 		window.addEventListener('message', (event) => {
 			this.embedded = true
 
-			if (event.data.type === 'set-color')
+			if (event.data.type === 'set-uuid') this.uuid = event.data.uuid
+			else if (event.data.type === 'set-color')
 				document.documentElement.style.setProperty(
 					event.data.colorName,
 					event.data.colorValue

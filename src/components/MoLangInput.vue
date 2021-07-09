@@ -127,7 +127,7 @@ prism.languages.molang = {
 }
 
 let molang
-
+const defaultStatement = 'math.pow(math.round(query.anim_time), 2)'
 export default {
 	props: {
 		embedded: Boolean,
@@ -138,7 +138,7 @@ export default {
 		code:
 			loadFromUrl() ||
 			localStorage.getItem('molang-code') ||
-			'math.pow(math.round(query.anim_time), 2)',
+			defaultStatement,
 		output: 0,
 		isOutputError: false,
 		consoleOutput: [],
@@ -147,6 +147,8 @@ export default {
 			localStorage.getItem('molang-execution-mode') || 'Manual',
 	}),
 	mounted() {
+		if (this.embedded) this.code = defaultStatement
+
 		const currentTime = () => (Date.now() - this.startTimestamp) / 1000
 		const log = (logVal) => {
 			this.consoleOutput.push(logVal)
@@ -178,7 +180,7 @@ export default {
 	},
 	methods: {
 		onChange() {
-			localStorage.setItem('molang-code', this.code)
+			localStorage.setItem(this.uuid || 'molang-code', this.code)
 
 			if (this.executionMode === 'On Change') this.execute()
 		},
@@ -234,6 +236,12 @@ export default {
 	watch: {
 		code() {
 			this.onChange()
+		},
+		uuid() {
+			this.code =
+				loadFromUrl() ||
+				localStorage.getItem(this.uuid || 'molang-code') ||
+				this.code
 		},
 	},
 }
