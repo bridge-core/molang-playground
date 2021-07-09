@@ -92,7 +92,7 @@ body {
 }
 
 .output-row {
-	border-top: 1px solid #ccc;
+	border-top: 1px solid var(--v-text-base, #ccc);
 }
 
 .output-row .molang-output,
@@ -102,21 +102,21 @@ body {
 	height: calc(16vh - 15px);
 }
 .output-row .molang-output {
-	border-right: 1px solid #ccc;
+	border-right: 1px solid var(--v-text-base, #ccc);
 }
 .output-row .console-output {
 	overflow-y: auto;
 }
 
 .options {
-	border-top: 1px solid #ccc;
+	border-top: 1px solid var(--v-text-base, #ccc);
 	height: calc(4vh - 2px);
 }
 .options button {
 	height: 100%;
-	outline: 1px solid #ccc;
+	outline: 1px solid var(--v-text-base, #ccc);
 	background: transparent;
-	color: #ccc;
+	color: var(--v-text-base, #ccc);
 	border: none;
 	padding: 0 4px;
 }
