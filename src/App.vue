@@ -1,7 +1,5 @@
 <template>
-	<div :style="colors">
-		<MoLangInput :embedded="embedded" />
-	</div>
+	<MoLangInput :embedded="embedded" />
 </template>
 
 <script>

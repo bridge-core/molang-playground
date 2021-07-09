@@ -59,32 +59,32 @@ body {
 }
 .token.boolean {
 	color: var(--v-atom-base, rgb(240, 141, 73));
-	background: var(--v-atom-background)
+	background: var(--v-atom-background);
 	font-style: var(--v-atom-font-style);
 }
 .token.number {
 	color: var(--v-number-base, rgb(240, 141, 73));
-	background: var(--v-number-background)
+	background: var(--v-number-background);
 	font-style: var(--v-number-font-style);
 }
 .token.string {
 	color: var(--v-string-base, rgb(126, 198, 153));
-	background: var(--v-string-background)
+	background: var(--v-string-background);
 	font-style: var(--v-string-font-style);
 }
 .token.keyword {
 	color: var(--v-keyword-base, rgb(97, 150, 204));
-	background: var(--v-keyword-background)
+	background: var(--v-keyword-background);
 	font-style: var(--v-keyword-font-style);
 }
 .token.function-name {
 	color: var(--v-type-base, rgb(97, 150, 204));
-	background: var(--v-type-background)
+	background: var(--v-type-background);
 	font-style: var(--v-type-font-style);
 }
 .token.selector {
 	color: var(--v-definition-base, rgb(97, 150, 204));
-	background: var(--v-definition-background)
+	background: var(--v-definition-background);
 	font-style: var(--v-definition-font-style);
 }
 .token.operator {
