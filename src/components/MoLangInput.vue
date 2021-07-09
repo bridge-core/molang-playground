@@ -111,16 +111,14 @@ import 'vue-prism-editor/dist/prismeditor.min.css'
 import prism from 'prismjs'
 import { PrismEditor } from 'vue-prism-editor'
 
-import 'prismjs/themes/prism-tomorrow.css'
-
 /**
  * Taken from JannisX11's MolangJS (https://github.com/JannisX11/MolangJS)
  * Modified to fit our needs
  */
 prism.languages.molang = {
 	string: /(')(?:\\(?:\r\n|[\s\S])|(?!\1)[^\\\r\n])*\1/,
-	'function-name': /\b(?!\d)(math|query|q)\.\w+/i,
-	selector: /\b(?!\d)(variable|temp|context|v|t|c)\.\w+/i,
+	'function-name': /\b(?!\d)(math|query|q)\./i,
+	selector: /\b(?!\d)(variable|temp|context|v|t|c)\./i,
 	boolean: /\b(?:true|false)\b/i,
 	number: /(?:\b\d+(?:\.\d+)?(?:[ed][+-]\d+)?|&h[a-f\d]+)\b[%&!#]?/i,
 	operator: /&&|\|\||[-+*/!<>]=?|[:?=]/i,
