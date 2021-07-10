@@ -1,46 +1,44 @@
 <template>
-	<MoLangInput :embedded="embedded" />
+	<div class="font-sans" :class="{ dark: isDarkMode }">
+		<MoLangInput :embedded="embedded" />
+	</div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { onMounted, ref } from 'vue'
 import MoLangInput from './components/MoLangInput.vue'
+import Button from './components/Button.vue'
 
-export default {
-	name: 'App',
-	components: {
-		MoLangInput,
-	},
-	data: () => ({
-		embedded: false,
-	}),
-	mounted() {
-		window.addEventListener('message', (event) => {
-			this.embedded = true
+const isDarkMode = ref(true)
+const embedded = window.location !== window.parent.location
 
-			if (event.data.type === 'set-color')
-				document.documentElement.style.setProperty(
-					event.data.colorName,
-					event.data.colorValue
-				)
-			else if (event.data.type === 'set-highlighter') {
-				const { color, background, textDecoration, isItalic } =
-					event.data.highlighterData ?? {}
-				const name = event.data.highlighterName
+onMounted(() => {
+	window.addEventListener('message', (event) => {
+		if (event.data.type === 'set-color') {
+			document.documentElement.style.setProperty(
+				event.data.colorName,
+				event.data.colorValue
+			)
+		} else if (event.data.type === 'set-highlighter') {
+			const { color, background, textDecoration, isItalic } =
+				event.data.highlighterData ?? {}
+			const name = event.data.highlighterName
 
-				document.documentElement.style.setProperty(
-					`--v-${name}-base`,
-					color
-				)
-				document.documentElement.style.setProperty(
-					`--v-${name}-background`,
-					background
-				)
-				document.documentElement.style.setProperty(
-					`--v-${name}-font-style`,
-					`${isItalic ? 'italic ' : ''}${textDecoration}`
-				)
-			}
-		})
-	},
-}
+			document.documentElement.style.setProperty(
+				`--v-${name}-base`,
+				color
+			)
+			document.documentElement.style.setProperty(
+				`--v-${name}-background`,
+				background
+			)
+			document.documentElement.style.setProperty(
+				`--v-${name}-font-style`,
+				`${isItalic ? 'italic ' : ''}${textDecoration}`
+			)
+		} else if (event.data.type === 'set-dark-mode') {
+			isDarkMode.value = event.data.isDarkMode
+		}
+	})
+})
 </script>

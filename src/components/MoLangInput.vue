@@ -1,240 +1,174 @@
 <template>
-	<PrismEditor
-		class="molang-editor"
-		v-model="code"
-		:highlight="highlight"
-		line-numbers
-	/>
-	<div class="options">
-		<button @click="toggleShouldLoop">
-			Execution: {{ executionMode }}
-		</button>
-		<button v-if="executionMode === 'Manual'" @click="execute">
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				height="24"
-				viewBox="0 0 24 24"
-				width="24"
-			>
-				<path d="M0 0h24v24H0z" fill="none" />
-				<path fill="currentColor" d="M8 5v14l11-7z" />
-			</svg>
-		</button>
-		<button v-if="!embedded" @click="copyCode">
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				viewBox="0 0 24 24"
-				fill="black"
-				width="18px"
-				height="18px"
-			>
-				<path d="M0 0h24v24H0z" fill="none" />
-				<path
-					fill="currentColor"
-					d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
-				/>
-			</svg>
-		</button>
-		<button v-if="!embedded" @click="share">
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				viewBox="0 0 24 24"
-				fill="black"
-				width="18px"
-				height="18px"
-			>
-				<path d="M0 0h24v24H0z" fill="none" />
-				<path
-					stroke="white"
-					fill="currentColor"
-					d="M10 9V5l-7 7 7 7v-4.1c5 0 8.5 1.6 11 5.1-1-5-4-10-11-11z"
-				/>
-			</svg>
-		</button>
-		<button v-if="!embedded" @click="clearCode">
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				height="24"
-				viewBox="0 0 24 24"
-				width="24"
-			>
-				<path d="M0 0h24v24H0z" fill="none" />
-				<path
-					fill="currentColor"
-					stroke="white"
-					d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
-				/>
-			</svg>
-		</button>
-		<button @click="resetTime">
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				height="24"
-				viewBox="0 0 24 24"
-				width="24"
-			>
-				<path
-					d="M0 0h24v24H0zm0 0h24v24H0zm0 0h24v24H0zm0 0h24v24H0zm0 0h24v24H0z"
-					fill="none"
-				/>
-				<path
-					fill="currentColor"
-					d="M19.04 4.55l-1.42 1.42C16.07 4.74 14.12 4 12 4c-1.83 0-3.53.55-4.95 1.48l1.46 1.46C9.53 6.35 10.73 6 12 6c3.87 0 7 3.13 7 7 0 1.27-.35 2.47-.94 3.49l1.45 1.45C20.45 16.53 21 14.83 21 13c0-2.12-.74-4.07-1.97-5.61l1.42-1.42-1.41-1.42zM15 1H9v2h6V1zm-4 8.44l2 2V8h-2v1.44zM3.02 4L1.75 5.27 4.5 8.03C3.55 9.45 3 11.16 3 13c0 4.97 4.02 9 9 9 1.84 0 3.55-.55 4.98-1.5l2.5 2.5 1.27-1.27-7.71-7.71L3.02 4zM12 20c-3.87 0-7-3.13-7-7 0-1.28.35-2.48.95-3.52l9.56 9.56c-1.03.61-2.23.96-3.51.96z"
-				/>
-			</svg>
-		</button>
+	<Editor v-model="code" />
 
-		<button @click="clearConsole">Clear Console</button>
-	</div>
-	<div class="output-row" style="display: flex">
-		<div class="molang-output">
-			<h1>Output:</h1>
+	<div
+		class="absolute p-2 pt-0 top-0 right-0 w-1/3 h-screen overflow-y-scroll"
+	>
+		<div
+			class="
+				py-2
+				mb-4
+				sticky
+				top-0
+				flex flex-wrap
+				gap-2
+				bg-[color:var(--v-background-base,#171717)]
+			"
+		>
+			<Button @click="toggleShouldLoop">
+				Execution: {{ executionMode }}
+			</Button>
+			<Button v-if="executionMode === 'Manual'" @click="execute">
+				<Play />
+			</Button>
+			<Button v-if="!embedded" @click="copyCode">
+				<Copy />
+			</Button>
+			<Button v-if="!embedded" @click="share">
+				<Share />
+			</Button>
+			<Button v-if="!embedded" @click="clearCode">
+				<Clear />
+			</Button>
+			<Button @click="resetTime">
+				<Time />
+			</Button>
+
+			<Button @click="clearConsole">Clear Console</Button>
+		</div>
+
+		<div class="tile mb-4">
+			<h1 class="text-2xl">Output:</h1>
 			<p :style="{ color: isOutputError ? '#d62828' : 'unset' }">
 				{{ output }}
 			</p>
 		</div>
-		<div class="console-output">
-			<h1>Console:</h1>
+
+		<div class="tile mb-4">
+			<h1 class="text-2xl">query.anim_time:</h1>
+			{{ currentAnimTime }}
+		</div>
+
+		<div class="tile">
+			<h1 class="text-2xl">Console:</h1>
 			<p v-if="consoleOutput.length === 0">[EMPTY]</p>
 			<ul v-else>
-				<li v-for="(text, i) in consoleOutput" :key="i">{{ text }}</li>
+				<li v-for="(text, i) in consoleOutput" :key="i">
+					{{ text }}
+				</li>
 			</ul>
 		</div>
 	</div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { useNow } from '@vueuse/core'
+import { ref, onMounted, onUnmounted, watch, computed } from 'vue'
 import { MoLang } from 'molang'
 import { loadFromUrl, shareMoLang } from '../composables/shareMoLang'
+import Editor from './Editor.vue'
+import Button from './Button.vue'
+import Time from './Icons/Time.vue'
+import Clear from './Icons/Clear.vue'
+import Share from './Icons/Share.vue'
+import Copy from './Icons/Copy.vue'
+import Play from './Icons/Play.vue'
+const props = defineProps<{ embedded: boolean }>()
 
-import 'vue-prism-editor/dist/prismeditor.min.css'
-import prism from 'prismjs'
-import { PrismEditor } from 'vue-prism-editor'
+let molang: MoLang
+let startTimestamp = Date.now()
+let lastFrameTimestamp = Date.now()
+const code = ref(
+	loadFromUrl() ||
+		localStorage.getItem('molang-code') ||
+		'math.pow(math.round(query.anim_time), 2)'
+)
+const output = ref(0)
+const isOutputError = ref(false)
+const consoleOutput = ref([])
+const shouldStopRefresh = ref(false)
+const executionMode = ref(
+	localStorage.getItem('molang-execution-mode') || 'Manual'
+)
 
-/**
- * Taken from JannisX11's MolangJS (https://github.com/JannisX11/MolangJS)
- * Modified to fit our needs
- */
-prism.languages.molang = {
-	string: /(')(?:\\(?:\r\n|[\s\S])|(?!\1)[^\\\r\n])*\1/,
-	'function-name': /\b(?!\d)(math|query|q)\./i,
-	selector: /\b(?!\d)(variable|temp|context|v|t|c)\./i,
-	boolean: /\b(?:true|false)\b/i,
-	number: /(?:\b\d+(?:\.\d+)?(?:[ed][+-]\d+)?|&h[a-f\d]+)\b[%&!#]?/i,
-	operator: /&&|\|\||[-+*/!<>]=?|[:?=]/i,
-	keyword: /\b(return|loop|for_each|continue|break)\b/i,
-	punctuation: /[.,;()[\]{}]/,
+const now = useNow()
+const currentAnimTime = ref<number>(0)
+
+onMounted(() => {
+	const currentTime = () => (Date.now() - startTimestamp) / 1000
+	const log = (logVal) => {
+		consoleOutput.value.push(logVal)
+		return logVal
+	}
+	molang = new MoLang({
+		'query.anim_time': currentTime,
+		'query.delta_time': () => Date.now() - lastFrameTimestamp,
+		'query.life_time': currentTime,
+		'query.log': log,
+		'query.debug_output': log,
+	})
+
+	onChange()
+	const refresh = () => {
+		if (shouldStopRefresh.value) return
+
+		currentAnimTime.value = currentTime()
+
+		if (executionMode.value === 'Loop') execute()
+		requestAnimationFrame(refresh)
+	}
+
+	refresh()
+})
+onUnmounted(() => {
+	shouldStopRefresh.value = true
+})
+
+function onChange() {
+	localStorage.setItem('molang-code', code.value)
+
+	if (executionMode.value === 'On Change') execute()
+}
+function execute() {
+	try {
+		output.value = molang.execute(code.value)
+		isOutputError.value = false
+	} catch (err) {
+		output.value = err.message
+		isOutputError.value = true
+	}
+
+	lastFrameTimestamp = Date.now()
 }
 
-let molang
-
-export default {
-	props: {
-		embedded: Boolean,
-	},
-	data: () => ({
-		startTimestamp: Date.now(),
-		lastFrameTimestamp: Date.now(),
-		code:
-			loadFromUrl() ||
-			localStorage.getItem('molang-code') ||
-			'math.pow(math.round(query.anim_time), 2)',
-		output: 0,
-		isOutputError: false,
-		consoleOutput: [],
-		shouldStopRefresh: false,
-		executionMode:
-			localStorage.getItem('molang-execution-mode') || 'Manual',
-	}),
-	mounted() {
-		const currentTime = () => (Date.now() - this.startTimestamp) / 1000
-		const log = (logVal) => {
-			this.consoleOutput.push(logVal)
-			return logVal
-		}
-		molang = new MoLang({
-			'query.anim_time': currentTime,
-			'query.delta_time': () => Date.now() - this.lastFrameTimestamp,
-			'query.life_time': currentTime,
-			'query.log': log,
-			'query.debug_output': log,
-		})
-
-		this.onChange()
-		const refresh = () => {
-			if (this.shouldStopRefresh) return
-
-			if (this.executionMode === 'Loop') this.execute()
-			requestAnimationFrame(refresh)
-		}
-
-		refresh()
-	},
-	unmounted() {
-		this.shouldStopRefresh = true
-	},
-	components: {
-		PrismEditor,
-	},
-	methods: {
-		onChange() {
-			localStorage.setItem('molang-code', this.code)
-
-			if (this.executionMode === 'On Change') this.execute()
-		},
-		execute() {
-			try {
-				this.output = molang.execute(this.code)
-				this.isOutputError = false
-			} catch (err) {
-				this.output = err.message
-				this.isOutputError = true
-			}
-
-			this.lastFrameTimestamp = Date.now()
-		},
-		highlight() {
-			return prism.highlight(this.code, prism.languages.molang)
-		},
-		resetTime() {
-			this.startTimestamp = Date.now()
-			this.lastFrameTimestamp = Date.now()
-		},
-		copyCode() {
-			navigator.clipboard.writeText(this.code)
-			window.alert('Successfully copied MoLang code!')
-		},
-		share() {
-			navigator.clipboard.writeText(shareMoLang(this.code))
-			window.alert('Successfully copied playground URL!')
-		},
-		clearCode() {
-			if (
-				window.confirm(
-					'Are you sure that you want to clear the MoLang code?'
-				)
-			) {
-				this.resetTime()
-				this.code = ''
-			}
-		},
-		clearConsole() {
-			this.consoleOutput = []
-		},
-		toggleShouldLoop() {
-			if (this.executionMode === 'Loop') this.executionMode = 'On Change'
-			else if (this.executionMode === 'On Change')
-				this.executionMode = 'Manual'
-			else if (this.executionMode === 'Manual')
-				this.executionMode = 'Loop'
-
-			localStorage.setItem('molang-execution-mode', this.executionMode)
-		},
-	},
-	watch: {
-		code() {
-			this.onChange()
-		},
-	},
+function resetTime() {
+	startTimestamp = Date.now()
+	lastFrameTimestamp = Date.now()
 }
+function copyCode() {
+	navigator.clipboard.writeText(code.value)
+}
+function share() {
+	navigator.clipboard.writeText(shareMoLang(code.value))
+}
+function clearCode() {
+	if (
+		window.confirm('Are you sure that you want to clear the MoLang code?')
+	) {
+		resetTime()
+		code.value = ''
+	}
+}
+function clearConsole() {
+	consoleOutput.value = []
+}
+function toggleShouldLoop() {
+	if (executionMode.value === 'Loop') executionMode.value = 'On Change'
+	else if (executionMode.value === 'On Change') executionMode.value = 'Manual'
+	else if (executionMode.value === 'Manual') executionMode.value = 'Loop'
+
+	localStorage.setItem('molang-execution-mode', executionMode.value)
+}
+
+watch(code, () => onChange())
 </script>
